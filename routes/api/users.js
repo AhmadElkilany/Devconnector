@@ -1,24 +1,24 @@
-const express = require("express");
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const express = require('express');
+const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
-const { check, validationResult } = require("express-validator");
+const { check, validationResult } = require('express-validator');
 
-const User = require("../../models/User");
-const config = require("config");
+const User = require('../../models/User');
+const config = require('config');
 
 // @route   POST api/users
 // @desc    Register a user
 // @access  Public
 router.post(
-  "/",
+  '/',
   [
-    check("name", "Name is Required").not().isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
+    check('name', 'Name is Required').not().isEmpty(),
+    check('email', 'Please include a valid email').isEmail(),
     check(
-      "password",
-      "Please Enter a password with 6 or more characters"
+      'password',
+      'Please Enter a password with 6 or more characters'
     ).isLength({ min: 6 }),
   ],
   async (req, res) => {
@@ -34,13 +34,13 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ errors: [{ msg: "User already exists" }] });
+          .json({ errors: [{ msg: 'User already exists' }] });
       }
 
       const avatar = gravatar.url(email, {
-        s: "200", //size
-        r: "pg", //rating(parental guide)
-        d: "mm", //default
+        s: '200', //size
+        r: 'pg', //rating(parental guide)
+        d: 'mm', //default
       });
 
       user = new User({
@@ -62,7 +62,7 @@ router.post(
       };
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        config.get('jwtSecret'),
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
@@ -71,7 +71,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   }
 );
