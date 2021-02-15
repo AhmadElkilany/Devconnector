@@ -53,7 +53,6 @@ router.post(
           .json({ errors: [{ msg: "Invalid Credentials" }] });
       }
 
-      //We return the token to automatically sign in upon register
       const payload = {
         user: {
           id: user.id,
